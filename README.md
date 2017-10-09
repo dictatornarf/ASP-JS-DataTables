@@ -1,2 +1,2 @@
-# ASP-MVC-JS-DataTables
+# ASP-JS-DataTables
 A library for processing server side requests for JS-DataTables in ASP.NET.
