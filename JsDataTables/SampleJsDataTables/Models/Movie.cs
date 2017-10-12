@@ -13,8 +13,7 @@ namespace SampleJsDataTables.Models
         public string Director { get; set; }
         public string Screenwriter { get; set; }
         public string Producer { get; set; }
-        public static IList<Movie> AllMovies { get => allMovies; set => allMovies = value; }
-        public static IList<Movie> AllMovies1 { get => allMovies; set => allMovies = value; }
+        public static IList<Movie> AllMovies => allMovies;
 
         public Movie(string phase, string name, DateTime releaseDate, string director, string screenwriter, string producer)
         {
