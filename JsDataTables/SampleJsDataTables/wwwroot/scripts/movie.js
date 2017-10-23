@@ -1,5 +1,8 @@
 ﻿$(document).ready(function () {
     $('#movieTable').DataTable({
+        //"search": {
+        //    "regex": true
+        //},
         "processing": true,
         "serverSide": true,
         "ajax": {
