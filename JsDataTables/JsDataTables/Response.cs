@@ -30,14 +30,14 @@ namespace JsDataTables
             if (!string.IsNullOrEmpty(request.SearchValue))
             {
                 IList<Column> searchableColumns = request.Columns.Where(x => x.Searchable).ToList();
-                processedData = processedData.Where(x => searchableColumns.Any(c => IsDataMatch(x, c.Data, request.SearchValue)));
+                processedData = processedData.Where(x => searchableColumns.Any(c => IsDataMatch(x, c.Data, request.SearchValue, request.SearchRegex)));
             }
 
             //Search for individual columns
             IList<Column> customSearchColumns = request.Columns.Where(x => !string.IsNullOrEmpty(x.SearchValue)).ToList();
             if (customSearchColumns.Count > 0)
             {
-                processedData = processedData.Where(x => customSearchColumns.All(c => IsDataMatch(x, c.Data, request.SearchValue)));
+                processedData = processedData.Where(x => customSearchColumns.All(c => IsDataMatch(x, c.Data, c.SearchValue, c.SearchRegex)));
             }
 
             //Order by
@@ -67,7 +67,7 @@ namespace JsDataTables
                 return orderedData;
         }
 
-        protected bool IsDataMatch(T data, string dataName, string searchValue)
+        protected bool IsDataMatch(T data, string dataName, string searchValue, bool searchRegex)
         {
             object value = GetData(data, dataName);
             if (value != null)
@@ -144,9 +144,16 @@ namespace JsDataTables
                 {
                     return mSearch == (decimal)value;
                 }
-                else
+                else //Treat as string
                 {
-                    return (value.ToString().IndexOf(searchValue, StringComparison.CurrentCultureIgnoreCase) != -1); //Search partial string
+                    if (searchRegex)
+                    {
+                        return System.Text.RegularExpressions.Regex.IsMatch(value.ToString(), searchValue, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                    }
+                    else
+                    {
+                        return (value.ToString().IndexOf(searchValue, StringComparison.CurrentCultureIgnoreCase) != -1); //Search partial string
+                    }
                 }
             }
 
