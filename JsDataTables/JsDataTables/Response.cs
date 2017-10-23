@@ -72,6 +72,11 @@ namespace JsDataTables
             object value = GetData(data, dataName);
             if (value != null)
             {
+                if (searchRegex)
+                {
+                    return System.Text.RegularExpressions.Regex.IsMatch(value.ToString(), searchValue, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                }
+
                 if (value is DateTime dtValue)
                 {
                     //Handle Julian
@@ -146,14 +151,7 @@ namespace JsDataTables
                 }
                 else //Treat as string
                 {
-                    if (searchRegex)
-                    {
-                        return System.Text.RegularExpressions.Regex.IsMatch(value.ToString(), searchValue, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-                    }
-                    else
-                    {
-                        return (value.ToString().IndexOf(searchValue, StringComparison.CurrentCultureIgnoreCase) != -1); //Search partial string
-                    }
+                    return (value.ToString().IndexOf(searchValue, StringComparison.CurrentCultureIgnoreCase) != -1); //Search partial string
                 }
             }
 
